@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#102b49">
+<title>GP Sheikhpura | Class Attendance Report - Checkbox Attendance</title>
+<style>
+:root{--navy:#102b49;--navy2:#183d63;--blue:#2563a6;--sky:#eaf2fb;--ink:#1d2939;--muted:#667085;--line:#d5deea;--green:#16845b;--red:#b54747;--amber:#a66b12}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;padding:26px 14px 36px;background:linear-gradient(135deg,#eaf1f8,#dce7f2);font-family:Arial,Helvetica,sans-serif;color:var(--ink)}
+.shell{max-width:920px;margin:0 auto}
+.panel{background:#fff;border:1px solid #dbe3ed;border-radius:18px;padding:clamp(20px,4vw,38px);box-shadow:0 14px 40px #17324d18}
+.brand{text-align:center;border-bottom:3px solid var(--navy);padding:0 0 22px;margin-bottom:24px}
+.brand .college{font-size:clamp(25px,5vw,36px);font-weight:800;letter-spacing:2px;color:var(--navy);margin:0 0 6px}
+.brand .report{font-size:clamp(17px,3.6vw,23px);font-weight:800;letter-spacing:1.4px;color:#253b56;margin:0}
+.brand .sub{font-size:11px;letter-spacing:3px;color:#718096;font-weight:700;margin-top:8px}
+.section-title{font-size:15px;letter-spacing:1.3px;font-weight:800;color:var(--navy);margin:0 0 14px;text-transform:uppercase}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 18px}
+.field label{display:block;font-size:12px;font-weight:700;color:#526174;margin:0 0 7px}
+input,select{width:100%;height:48px;border:1px solid #cbd5e1;border-radius:9px;padding:0 13px;background:#fbfdff;color:#172b44;font-size:15px;outline:none}
+input:focus,select:focus{border-color:#3679bd;box-shadow:0 0 0 3px #3679bd20}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+button{border:0;border-radius:9px;padding:13px 17px;font-size:14px;font-weight:750;cursor:pointer}
+button:active{transform:translateY(1px)}
+.primary{background:var(--navy);color:#fff;flex:1}
+.blue{background:var(--blue);color:#fff}
+.light{background:#e9f0f8;color:var(--navy)}
+.danger{background:#fff0f0;color:#a52d2d}
+.note{font-size:12px;color:var(--muted);line-height:1.5;margin:10px 0 0}
+.hidden{display:none!important}
+.report-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+.report-head h2{margin:0;color:var(--navy);font-size:23px}
+.badge{background:#e8f1fb;color:#1d4e7d;border-radius:30px;padding:8px 12px;font-size:12px;font-weight:800}
+.meta{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--line);border-left:4px solid var(--navy);border-radius:9px;margin:16px 0 25px;overflow:hidden}
+.meta-cell{display:flex;justify-content:space-between;gap:12px;padding:13px 15px;border-bottom:1px solid #e5eaf0;font-size:13px}
+.meta-cell:nth-last-child(-n+2){border-bottom:0}
+.meta-cell span{color:#5b6878;font-weight:700}.meta-cell strong{color:#25364c;text-align:right}
+.stats{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 22px}
+.stat{background:#f4f7fb;border:1px solid #dfe7f0;border-radius:9px;padding:10px 15px;min-width:110px;font-size:12px;color:#657286}
+.stat b{display:block;font-size:22px;margin-top:4px;color:var(--navy)}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:590px}
+thead th{background:var(--navy);color:#fff;text-align:left;padding:13px 12px;font-size:11px;letter-spacing:.6px}
+tbody td{padding:10px 12px;border:1px solid #e1e6ed;color:#344054}
+tbody tr:nth-child(even){background:#f8fafc}
+tbody tr:hover{background:#eef5fc}
+td.center{text-align:center}
+.name-input{height:32px;border:1px solid transparent;background:transparent;padding:4px 7px;border-radius:5px;font-size:13px;min-width:120px}
+.name-input:focus{background:#fff;border-color:#8cb6df}
+.status-select{height:32px;width:112px;padding:0 6px;font-size:12px;font-weight:700;border:1px solid #d4dce6;background:#fff}
+.present{color:var(--green);font-weight:800}.absent{color:var(--red);font-weight:800}
+.tick-wrap{display:inline-flex;align-items:center;gap:9px;cursor:pointer;font-size:13px;font-weight:800}
+.attendance-tick{appearance:auto;width:21px;height:21px;accent-color:#16845b;cursor:pointer;margin:0}
+.status-label{min-width:76px}
+@media print{.attendance-tick{display:none}.status-label{display:inline!important}}
+.table-tools{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:15px 0}
+.table-tools input{max-width:260px;height:40px;font-size:13px}
+.table-tools button{padding:10px 13px}
+.footer{border-top:1px solid #dce3eb;margin-top:26px;padding-top:13px;text-align:center;color:#657286;font-size:12px;line-height:1.6}
+.footer strong{color:var(--navy)}
+.saved-card{border:1px solid var(--line);border-radius:10px;padding:14px;margin:10px 0;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.saved-card strong{display:block;color:var(--navy);margin-bottom:5px}.saved-card small{color:var(--muted)}
+.saved-card button{padding:9px 12px}
+@media(max-width:600px){body{padding:12px 8px}.panel{padding:17px 13px;border-radius:13px}.grid,.meta{grid-template-columns:1fr}.meta-cell:nth-last-child(2){border-bottom:1px solid #e5eaf0}.meta-cell:last-child{border-bottom:0}.actions button{flex:1 1 100%}.brand .sub{letter-spacing:2px}.saved-card{align-items:flex-start;flex-direction:column}}
+@page{size:A4 portrait;margin:13mm}
+@media print{
+ body{background:#fff;padding:0;color:#111}.shell{max-width:none}.panel{border:0;box-shadow:none;border-radius:0;padding:0}
+ .no-print,#setup,#saved,.table-tools,.status-select,.name-input{display:none!important}
+ #report{display:block!important}.brand{padding-bottom:12px;margin-bottom:14px}.brand .college{font-size:25px}.brand .report{font-size:17px}.brand .sub{font-size:9px}
+ .meta{margin:10px 0 15px}.meta-cell{padding:8px 10px;font-size:10px}
+ .section-title{font-size:12px;margin-bottom:8px}.stats{gap:6px;margin-bottom:12px}.stat{padding:7px 10px;min-width:85px}.stat b{font-size:17px}
+ table{min-width:0;font-size:9px}thead th{padding:7px 6px;font-size:8px}tbody td{padding:5px 6px}
+ .name-print{display:inline!important}.footer{margin-top:15px;font-size:9px}
+ tr{break-inside:avoid}
+}
+.name-print{display:none}
+</style>
+</head>
+<body>
+<div class="shell">
+<section class="panel" id="setup">
+ <header class="brand"><p class="college">GP SHEIKHPURA</p><p class="report">CLASS ATTENDANCE REPORT</p><div class="sub">OFFICIAL CLASS RECORD</div></header>
+ <h3 class="section-title">Attendance Details</h3>
+ <form id="setupForm">
+  <div class="grid">
+   <div class="field"><label for="branch">Branch</label><input id="branch" value="CSE" required></div>
+   <div class="field"><label for="date">Date</label><input id="date" type="date" required></div>
+   <div class="field"><label for="semester">Class / Semester</label><input id="semester" value="1st Semester" required></div>
+   <div class="field"><label for="subject">Subject</label><input id="subject" placeholder="e.g. MATHS" required></div>
+   <div class="field"><label for="teacher">Teacher Name</label><input id="teacher" placeholder="e.g. RANJEET SIR"></div>
+   <div class="field"><label for="cr">CR Name</label><input id="cr" placeholder="Enter CR name"></div>
+   <div class="field" style="grid-column:1/-1"><label for="rollRange">Roll Number Range</label><input id="rollRange" placeholder="2026/CSE/001 TO 2026/CSE/060 AND 2026/CSE/301 TO 2026/CSE/310" required></div>
+  </div>
+  <p class="note">Enter ranges exactly like this:<br><b>2026/CSE/001 TO 2026/CSE/060 AND 2026/CSE/301 TO 2026/CSE/310</b><br>You may also put each range on a new line. The preview below should show <b>70 students</b>.</p>
+  <p id="rangePreview" class="note" style="font-weight:800;color:#176044">Roll number preview: enter a range above.</p>
+  <div class="actions"><button class="primary" type="submit">Create Attendance Report</button><button class="blue" type="button" id="showSaved">Saved Reports</button></div>
+ </form>
+</section>
+
+<section class="panel hidden" id="report">
+ <div class="no-print report-head"><div><h2>Class Attendance</h2><div class="note">Tick the checkbox for Present. If it is not ticked, the student is marked Absent.</div></div><span class="badge">GP SHEIKHPURA • OFFICIAL RECORD</span></div>
+ <header class="brand"><p class="college">GP SHEIKHPURA</p><p class="report">CLASS ATTENDANCE REPORT</p><div class="sub">OFFICIAL CLASS RECORD</div></header>
+ <div class="meta" id="meta"></div>
+ <div class="stats">
+  <div class="stat">Total Students<b id="total">0</b></div>
+  <div class="stat">Present Students<b id="present">0</b></div>
+  <div class="stat">Absent Students<b id="absent">0</b></div>
+
+ </div>
+ <div class="no-print table-tools">
+  <input id="search" placeholder="Search roll number or name...">
+  <div class="actions" style="margin:0">
+   <button class="light" id="allPresent" type="button">Mark All Present</button>
+   <button class="light" id="allAbsent" type="button">Mark All Absent</button>
+   <button class="light" id="editDetails" type="button">Edit Report Details</button>
+  </div>
+ </div>
+ <h3 class="section-title">Student Attendance</h3>
+ <div class="table-wrap"><table>
+  <thead><tr><th style="width:9%">S. NO.</th><th style="width:29%">ROLL NUMBER</th><th style="width:35%">STUDENT NAME</th><th style="width:27%">STATUS</th></tr></thead>
+  <tbody id="students"></tbody>
+ </table></div>
+ <div class="no-print actions">
+  <button class="primary" id="save" type="button">Save Report</button>
+  <button class="blue" id="pdf" type="button">Download PDF</button>
+  <button class="light" id="csv" type="button">Download Excel (CSV)</button>
+  <button class="light" id="print" type="button">Print Report</button>
+  <button class="danger" id="back" type="button">Back to Setup</button>
+ </div>
+ <footer class="footer">This is a computer-generated class attendance record.<br><strong>Web created by Ansh Raj Thakur</strong> | 1st Year CSE Student</footer>
+</section>
+
+<section class="panel hidden" id="saved">
+ <div class="report-head"><h2 style="color:var(--navy);margin:0">Saved Attendance Reports</h2><button class="light" id="savedBack">Back</button></div>
+ <div id="savedList"></div>
+</section>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+let current=null,records=[];
+$('date').value=new Date().toISOString().slice(0,10);
+const getRecords=()=>{try{return JSON.parse(localStorage.getItem('gpAttendanceReports')||'[]')}catch(e){return []}};
+const persist=()=>localStorage.setItem('gpAttendanceReports',JSON.stringify(records));
+function show(which){['setup','report','saved'].forEach(id=>$(id).classList.toggle('hidden',id!==which));window.scrollTo(0,0)}
+function makeRolls(raw){
+ // Accept complete ranges separated by AND, commas, ampersands, semicolons or new lines.
+ // Example: 2026/CSE/001 TO 2026/CSE/060 AND 2026/CSE/301 TO 2026/CSE/310
+ const chunks=raw.trim().split(/(?:\s*,\s*|\s+\band\b\s+|\s*&\s*|\s*;\s*|\r?\n)+/i).filter(Boolean);
+ if(!chunks.length)throw Error('Please enter a roll-number range.');
+ const students=[],seen=new Set();
+ for(const chunk of chunks){
+  const m=chunk.trim().match(/^([A-Za-z0-9][A-Za-z0-9/-]*?)\s+to\s+([A-Za-z0-9][A-Za-z0-9/-]*)$/i);
+  if(!m)throw Error('Correct format: 2026/CSE/001 TO 2026/CSE/060 AND 2026/CSE/301 TO 2026/CSE/310');
+  const a=m[1].match(/^(.*?)(\d+)$/),b=m[2].match(/^(.*?)(\d+)$/);
+  if(!a||!b||a[1]!==b[1])throw Error('A range must have the same roll-number prefix at both ends.');
+  const first=Number(a[2]),last=Number(b[2]),width=a[2].length;
+  if(last<first)throw Error('Range end must be greater than or equal to range start.');
+  if(last-first>499)throw Error('Each range can contain a maximum of 500 students.');
+  for(let n=first;n<=last;n++){
+   const roll=a[1]+String(n).padStart(width,'0');
+   if(!seen.has(roll)){students.push({roll,name:'',status:'absent'});seen.add(roll);}
+  }
+ }
+ if(students.length>1000)throw Error('Maximum 1000 students are allowed in one report.');
+ return students;
+}
+function updateRangePreview(){
+ const el=$('rangePreview');
+ if(!$('rollRange').value.trim()){el.textContent='Roll number preview: enter a range above.';return;}
+ try{
+  const count=makeRolls($('rollRange').value).length;
+  el.textContent='✓ Valid roll-number ranges — '+count+' students will be added.';
+  el.style.color='#176044';
+ }catch(e){
+  el.textContent='Please check the format. Example: 2026/CSE/001 TO 2026/CSE/060 AND 2026/CSE/301 TO 2026/CSE/310';
+  el.style.color='#b54747';
+ }
+}
+$('rollRange').addEventListener('input',updateRangePreview);
+function formData(){return {branch:$('branch').value.trim(),date:$('date').value,semester:$('semester').value.trim(),subject:$('subject').value.trim().toUpperCase(),teacher:$('teacher').value.trim(),cr:$('cr').value.trim()}}
+$('setupForm').onsubmit=e=>{e.preventDefault();try{current={id:Date.now(),...formData(),students:makeRolls($('rollRange').value)};render();show('report')}catch(err){alert(err.message)}};
+function render(){
+ $('meta').innerHTML='';
+ const items=[['Branch',current.branch],['Date',current.date],['Class / Semester',current.semester],['Subject',current.subject],['Teacher Name',current.teacher||'—'],['CR Name',current.cr||'—']];
+ items.forEach(([k,v])=>{const d=document.createElement('div');d.className='meta-cell';const a=document.createElement('span'),b=document.createElement('strong');a.textContent=k;b.textContent=v;d.append(a,b);$('meta').append(d)});
+ const body=$('students');body.innerHTML='';
+ current.students.forEach((s,i)=>{
+  const tr=document.createElement('tr');tr.dataset.search=(s.roll+' '+s.name).toLowerCase();
+  const no=document.createElement('td');no.className='center';no.textContent=i+1;
+  const roll=document.createElement('td');roll.textContent=s.roll;
+  const nameCell=document.createElement('td'),name=document.createElement('input');name.className='name-input';name.placeholder='Enter student name';name.value=s.name;name.setAttribute('aria-label','Student name '+s.roll);
+  name.oninput=()=>{s.name=name.value;tr.dataset.search=(s.roll+' '+s.name).toLowerCase()};
+  const namePrint=document.createElement('span');namePrint.className='name-print';namePrint.textContent=s.name||'—';name.oninput=()=>{s.name=name.value;namePrint.textContent=s.name||'—';tr.dataset.search=(s.roll+' '+s.name).toLowerCase()};
+  nameCell.append(name,namePrint);
+  const statusCell=document.createElement('td');
+  const tickWrap=document.createElement('label');tickWrap.className='tick-wrap';
+  const tick=document.createElement('input');tick.type='checkbox';tick.className='attendance-tick';tick.checked=s.status==='present';tick.setAttribute('aria-label','Tick if present: '+s.roll);
+  const statusText=document.createElement('span');statusText.className='status-label';
+  const updateTick=()=>{s.status=tick.checked?'present':'absent';statusText.textContent=tick.checked?'✓ Present':'✕ Absent';statusText.className='status-label '+(tick.checked?'present':'absent');stats()};
+  tick.addEventListener('change',updateTick);updateTick();
+  tickWrap.append(tick,statusText);statusCell.append(tickWrap);tr.append(no,roll,nameCell,statusCell);body.append(tr);
+ });stats();
+}
+function styleStatus(el){el.className='status-select '+(el.value==='present'?'present':el.value==='absent'?'absent':el.value==='leave'?'leave':'unmarked')}
+function stats(){
+ $('total').textContent=current.students.length;
+ $('present').textContent=current.students.filter(s=>s.status==='present').length;
+ $('absent').textContent=current.students.filter(s=>s.status==='absent').length;
+
+}
+$('search').oninput=()=>{let q=$('search').value.toLowerCase();document.querySelectorAll('#students tr').forEach(tr=>tr.style.display=tr.dataset.search.includes(q)?'':'none')};
+function setAll(status){current.students.forEach(s=>s.status=status);render()}
+$('allPresent').onclick=()=>setAll('present');$('allAbsent').onclick=()=>setAll('absent');
+$('editDetails').onclick=()=>{ $('branch').value=current.branch;$('date').value=current.date;$('semester').value=current.semester;$('subject').value=current.subject;$('teacher').value=current.teacher;$('cr').value=current.cr;show('setup') };
+$('back').onclick=()=>show('setup');
+$('save').onclick=()=>{records=getRecords();const i=records.findIndex(r=>r.id===current.id);if(i>=0)records[i]=current;else records.unshift(current);persist();alert('Attendance report saved successfully on this device.')};
+$('showSaved').onclick=renderSaved;$('savedBack').onclick=()=>show('setup');
+function renderSaved(){
+ records=getRecords();const box=$('savedList');box.innerHTML='';
+ if(!records.length){box.innerHTML='<p class="note">No saved reports found on this device.</p>'}
+ records.forEach(r=>{
+  const row=document.createElement('div');row.className='saved-card';const info=document.createElement('div');const title=document.createElement('strong');title.textContent=r.branch+' • '+r.subject+' • '+r.semester;const small=document.createElement('small');small.textContent=r.date+' | '+r.students.length+' students';info.append(title,small);
+  const buttons=document.createElement('div');buttons.style.display='flex';buttons.style.gap='8px';
+  const open=document.createElement('button');open.className='blue';open.textContent='Open / Edit';open.onclick=()=>{current=JSON.parse(JSON.stringify(r));render();show('report')};
+  const del=document.createElement('button');del.className='danger';del.textContent='Delete';del.onclick=()=>{if(confirm('Delete this saved report?')){records=getRecords().filter(x=>x.id!==r.id);persist();renderSaved()}};
+  buttons.append(open,del);row.append(info,buttons);box.append(row);
+ });show('saved');
+}
+$('csv').onclick=()=>{
+ const rows=[['GP SHEIKHPURA - CLASS ATTENDANCE REPORT'],['Branch',current.branch,'Date',current.date],['Class / Semester',current.semester,'Subject',current.subject],['Teacher',current.teacher,'CR',current.cr],[],['S. No.','Roll Number','Student Name','Status'],...current.students.map((s,i)=>[i+1,s.roll,s.name||'—',(s.status==='present'?'PRESENT':'ABSENT')])];
+ const csv=rows.map(r=>r.map(v=>'"'+String(v??'').replaceAll('"','""')+'"').join(',')).join('\r\n');
+ const blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='GP-Sheikhpura-Attendance-'+current.date+'.csv';a.click();URL.revokeObjectURL(url);
+};
+$('print').onclick=()=>window.print();
+$('pdf').onclick=()=>{
+ // PDF is generated from the same clean A4 report layout. If the PDF library is unavailable, use the browser's Save as PDF option.
+ if(window.jspdf&&window.jspdf.jsPDF){
+  const {jsPDF}=window.jspdf;const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+  doc.setTextColor(16,43,73);doc.setFont('helvetica','bold');doc.setFontSize(18);doc.text('GP SHEIKHPURA',105,17,{align:'center'});
+  doc.setFontSize(12);doc.text('CLASS ATTENDANCE REPORT',105,24,{align:'center'});
+  doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(100);doc.text('OFFICIAL CLASS RECORD',105,29,{align:'center'});
+  doc.setDrawColor(16,43,73);doc.setLineWidth(.8);doc.line(14,33,196,33);
+  const metaRows=[['Branch',current.branch,'Date',current.date],['Class / Semester',current.semester,'Subject',current.subject],['Teacher Name',current.teacher||'—','CR Name',current.cr||'—']];
+  let y=42;doc.setFontSize(9);metaRows.forEach(row=>{doc.setFont('helvetica','bold');doc.setTextColor(70);doc.text(row[0]+':',16,y);doc.setFont('helvetica','normal');doc.setTextColor(30);doc.text(String(row[1]),48,y);doc.setFont('helvetica','bold');doc.setTextColor(70);doc.text(row[2]+':',108,y);doc.setFont('helvetica','normal');doc.setTextColor(30);doc.text(String(row[3]),140,y);y+=8});
+  doc.setFont('helvetica','bold');doc.setTextColor(16,43,73);doc.text('STUDENT ATTENDANCE',14,71);
+  const head=[['S. NO.','ROLL NUMBER','STUDENT NAME','STATUS']];
+  const body=current.students.map((s,i)=>[String(i+1),s.roll,s.name||'—',(s.status==='present'?'✓ Present':'✕ Absent')]);
+  if(doc.autoTable){doc.autoTable({head,body,startY:75,theme:'grid',styles:{font:'helvetica',fontSize:8,cellPadding:2.2,textColor:[40,50,65],lineColor:[215,223,232],lineWidth:.15},headStyles:{fillColor:[16,43,73],textColor:255,fontStyle:'bold'},alternateRowStyles:{fillColor:[246,249,252]},columnStyles:{0:{cellWidth:17},1:{cellWidth:48},2:{cellWidth:67},3:{cellWidth:48}},margin:{left:14,right:14},didParseCell:data=>{if(data.section==='body'&&data.column.index===3){const t=String(data.cell.raw);data.cell.styles.textColor=t.includes('Present')?[22,132,91]:t.includes('Absent')?[181,71,71]:[166,107,18];data.cell.styles.fontStyle='bold'}}});}
+  else{doc.text('Please use Print Report if the PDF table module is unavailable.',14,80)}
+  const finalY=doc.lastAutoTable?doc.lastAutoTable.finalY:90;doc.setFontSize(8);doc.setTextColor(95);doc.text('Present: '+current.students.filter(s=>s.status==='present').length+' / '+current.students.length,14,Math.min(finalY+8,280));
+  doc.setFont('helvetica','bold');doc.setTextColor(16,43,73);doc.text('Web created by Ansh Raj Thakur | 1st Year CSE Student',105,287,{align:'center'});
+  doc.save('GP-Sheikhpura-Class-Attendance-'+current.date+'.pdf');
+ }else{
+  alert('Direct PDF download के लिए internet connection चालू रखें। अब Print window खुलेगी—Printer में “Save as PDF” चुनें।');
+  window.print();
+ }
+};
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+</body>
+</html>
